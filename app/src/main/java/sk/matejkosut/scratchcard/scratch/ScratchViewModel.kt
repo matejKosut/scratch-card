@@ -15,8 +15,7 @@ import sk.matejkosut.scratchcard.di.DefaultDispatcher
 import javax.inject.Inject
 
 data class ScratchUiState(
-    var state: Int = 0,
-    var error: Int = 0
+    var state: Int = 0
 )
 
 @HiltViewModel
@@ -28,13 +27,27 @@ class ScratchViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(ScratchUiState())
     val uiState: StateFlow<ScratchUiState> = _uiState
+
+    init {
+        scope.launch {
+            withContext(dispatcher) {
+                val state = scratchCardRepository.getScratchCardState()
+                if (state == 2 || state == 3) {
+                    val code = scratchCardRepository.getScratchCardCode()
+                    _uiState.value = ScratchUiState(code)
+                }
+            }
+        }
+    }
+
     fun scratchCard() {
-        _uiState.value = ScratchUiState(1, 0)
+        _uiState.value = ScratchUiState(1)
         scope.launch {
             withContext(dispatcher) {
                 revealCard()
                 val code = scratchCardRepository.getScratchCardCode()
-                _uiState.value = ScratchUiState(code,  0)
+                scratchCardRepository.updateScratchCardState(2, code)
+                _uiState.value = ScratchUiState(code)
             }
         }
     }

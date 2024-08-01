@@ -44,7 +44,11 @@ class DefaultScratchCardRepository @Inject constructor(
         return localDataSource.getAll().first().code
     }
 
-    override suspend fun activateScratchCard(code: Int): Int {
+    override suspend fun updateScratchCardState(state: Int, code: Int) {
+        localDataSource.updateState(state, code)
+    }
+
+    override suspend fun activateScratchCard(code: Int): String {
         return networkDataSource.activateScratchCard(code).android
     }
 }

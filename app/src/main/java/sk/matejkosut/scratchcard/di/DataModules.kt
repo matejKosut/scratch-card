@@ -9,8 +9,9 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.scalars.ScalarsConverterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 import sk.matejkosut.scratchcard.data.DefaultScratchCardRepository
 import sk.matejkosut.scratchcard.data.ScratchCardRepository
 import sk.matejkosut.scratchcard.data.source.local.ScratchCardDao
@@ -33,15 +34,23 @@ object DataSourceModule {
 
     @Singleton
     @Provides
-    fun providesOkHttpClient(): OkHttpClient =
+    fun providesHttpLoggingInterceptor() = HttpLoggingInterceptor()
+        .apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+
+    @Singleton
+    @Provides
+    fun providesOkHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient =
         OkHttpClient
             .Builder()
+            .addInterceptor(httpLoggingInterceptor)
             .build()
 
     @Singleton
     @Provides
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
-        .addConverterFactory(ScalarsConverterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create())
         .baseUrl("https://api.o2.sk/")
         .client(okHttpClient)
         .build()

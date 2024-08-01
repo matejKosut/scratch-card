@@ -12,11 +12,11 @@ import sk.matejkosut.scratchcard.data.ScratchCardRepository
 import sk.matejkosut.scratchcard.di.ApplicationScope
 import sk.matejkosut.scratchcard.di.IoDispatcher
 import sk.matejkosut.scratchcard.home.HomeUiState
+import sk.matejkosut.scratchcard.scratch.ScratchUiState
 import javax.inject.Inject
 
 data class ActivationUiState(
-    val state: Int = 0,
-    val error: Int = 0
+    val state: Int = 0
 )
 
 @HiltViewModel
@@ -29,14 +29,32 @@ class ActivationViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(ActivationUiState())
     val uiState: StateFlow<ActivationUiState> = _uiState
 
-    fun activateCard() {
-        _uiState.value = ActivationUiState(1, 0)
+    init {
         scope.launch {
             withContext(dispatcher) {
-                val active = scratchCardRepository.activateScratchCard(
-                    scratchCardRepository.getScratchCardCode()
-                )
-                _uiState.value = ActivationUiState(active,  0)
+                val state = scratchCardRepository.getScratchCardState()
+                // activation possible only when card is scratched
+                if (state == 1) {
+                    _uiState.value = ActivationUiState(-1)
+                } else if (state == 3) {
+                    _uiState.value = ActivationUiState(2)
+                }
+            }
+        }
+    }
+
+    fun activateCard() {
+        _uiState.value = ActivationUiState(1)
+        scope.launch {
+            withContext(dispatcher) {
+                val code = scratchCardRepository.getScratchCardCode()
+                val active = scratchCardRepository.activateScratchCard(code)
+                scratchCardRepository.updateScratchCardState(3, code)
+                val activeInt = active.toInt()
+                if (activeInt in 277028..Integer.MAX_VALUE)
+                    _uiState.value = ActivationUiState(2)
+                else
+                    _uiState.value = ActivationUiState(-3)
             }
         }
     }

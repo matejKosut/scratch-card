@@ -59,6 +59,7 @@ dependencies {
     // Compose
     val composeBom = platform(libs.compose.bom)
     implementation(libs.compose.compiler)
+    implementation(libs.androidx.compose.runtime)
     implementation(composeBom)
     androidTestImplementation(composeBom)
     implementation(libs.compose.foundation)
@@ -71,7 +72,8 @@ dependencies {
 
     // Retrofit
     implementation(libs.retrofit.core)
-    implementation(libs.retrofit.scalars)
+    implementation(libs.retrofit.gson)
+    implementation(libs.okhttp3.interceptor)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

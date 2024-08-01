@@ -11,6 +11,8 @@ interface ScratchCardRepository {
 
     fun getScratchCardCode(): Int
 
-    suspend fun activateScratchCard(code: Int): Int
+    suspend fun updateScratchCardState(state: Int, code: Int)
+
+    suspend fun activateScratchCard(code: Int): String
 
 }

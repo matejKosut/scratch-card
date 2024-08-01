@@ -1,11 +1,13 @@
 package sk.matejkosut.scratchcard.activation
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -18,9 +20,14 @@ fun ActivationScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Button(onClick = viewModel::activateCard) {
+        Button(
+            onClick = viewModel::activateCard,
+            enabled = uiState.state.asEnabled()
+        ) {
             Text(text = "Activate the Card")
         }
         Text(text = uiState.state.asTextState())
@@ -29,9 +36,14 @@ fun ActivationScreen(
 
 private fun Int.asTextState(): String {
     return when (this) {
+        -1 -> "Not possible to activate. Card needs to be scratched first."
         0 -> "Not activated"
         1 -> "Activating..."
-        in 277028..Integer.MAX_VALUE -> "Card is activated."
+        2 -> "Card is activated."
         else -> "Error"
     }
+}
+
+private fun Int.asEnabled(): Boolean {
+    return this != -1 && this != 2
 }

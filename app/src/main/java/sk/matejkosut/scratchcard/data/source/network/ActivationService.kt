@@ -5,7 +5,7 @@ import retrofit2.http.Query
 
 interface ActivationService {
 
-    @GET("/version")
+    @GET("version")
     suspend fun activateScratchCard(@Query("code") code: Int): ActivationResponse
 
 }

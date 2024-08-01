@@ -14,8 +14,7 @@ import sk.matejkosut.scratchcard.di.IoDispatcher
 import javax.inject.Inject
 
 data class HomeUiState(
-    val state: Int = 0,
-    val error: Int = 0
+    val state: Int = 0
 )
 
 @HiltViewModel
@@ -29,11 +28,15 @@ class HomeViewModel @Inject constructor(
     val uiState: StateFlow<HomeUiState> = _uiState
 
     init {
-        _uiState.value = HomeUiState(1, 0)
+        refresh()
+    }
+
+    fun refresh() {
+        _uiState.value = HomeUiState(0)
         scope.launch {
             withContext(dispatcher) {
                 val state = scratchCardRepository.getScratchCardState()
-                _uiState.value = HomeUiState(state,  0)
+                _uiState.value = HomeUiState(state)
             }
         }
     }
