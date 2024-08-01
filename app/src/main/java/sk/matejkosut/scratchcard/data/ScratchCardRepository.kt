@@ -1,5 +1,6 @@
 package sk.matejkosut.scratchcard.data
 
+import kotlinx.coroutines.flow.Flow
 import sk.matejkosut.scratchcard.data.source.local.ScratchCard
 
 interface ScratchCardRepository {
