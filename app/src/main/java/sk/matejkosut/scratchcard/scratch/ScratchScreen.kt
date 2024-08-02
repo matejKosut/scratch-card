@@ -10,11 +10,13 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import sk.matejkosut.scratchcard.R
 
 @Composable
 fun ScratchScreen(
@@ -47,17 +49,18 @@ fun ScratchScreen(
             onClick = viewModel::scratchCard,
             enabled = uiState.code.asEnabled()
         ) {
-            Text(text = "Scratch the Card")
+            Text(text = stringResource(id = R.string.scratch__scratch))
         }
         Text(text = uiState.code.asTextState())
     }
 }
 
+@Composable
 private fun Int.asTextState(): String {
     return when (this) {
-        0 -> "Scratching..."
-        1 -> "Unscratched"
-        else -> "Card is scratched, the code is $this."
+        0 -> stringResource(id = R.string.scratch__scratching)
+        1 -> stringResource(id = R.string.scratch__unscratched)
+        else -> stringResource(id = R.string.scratch__scratched, this)
     }
 }
 

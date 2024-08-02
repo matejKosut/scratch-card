@@ -9,9 +9,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import sk.matejkosut.scratchcard.home.HomeViewModel
+import sk.matejkosut.scratchcard.R
 
 @Composable
 fun ActivationScreen(
@@ -28,20 +29,21 @@ fun ActivationScreen(
             onClick = viewModel::activateCard,
             enabled = uiState.state.asEnabled()
         ) {
-            Text(text = "Activate the Card")
+            Text(text = stringResource(id = R.string.activation__activate))
         }
         Text(text = uiState.state.asTextState())
     }
 }
 
+@Composable
 private fun Int.asTextState(): String {
     return when (this) {
-        -1 -> "Not possible to activate. Card needs to be scratched first."
-        -2 -> "No internet connection."
-        0 -> "Not activated"
-        1 -> "Activating..."
-        2 -> "Card is activated."
-        else -> "Error"
+        -1 -> stringResource(id = R.string.activation__not_possible)
+        -2 -> stringResource(id = R.string.activation__no_internet)
+        0 -> stringResource(id = R.string.activation__not_activated)
+        1 -> stringResource(id = R.string.activation__activating)
+        2 -> stringResource(id = R.string.activation__activated)
+        else -> stringResource(id = R.string.activation__error)
     }
 }
 

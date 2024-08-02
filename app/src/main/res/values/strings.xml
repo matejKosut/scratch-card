@@ -1,3 +1,26 @@
 <resources>
+
     <string name="app_name">ScratchCard</string>
+
+    <string name="home__goto_scratching">Go to Card scratching</string>
+    <string name="home__goto_activation">Go to Card activation</string>
+    <string name="home__loading">Loading…</string>
+    <string name="home__unscratched">Unscratched</string>
+    <string name="home__scratched">Scratched</string>
+    <string name="home__activated">Activated</string>
+    <string name="home__none">None</string>
+
+    <string name="scratch__scratch">Scratch the Card</string>
+    <string name="scratch__scratching">Scratching…</string>
+    <string name="scratch__unscratched">Unscratched</string>
+    <string name="scratch__scratched">Card is scratched, the code is %1$d.</string>
+
+    <string name="activation__activate">Activate the Card</string>
+    <string name="activation__not_possible">Not possible to activate. Card needs to be scratched first.</string>
+    <string name="activation__no_internet">No internet connection.</string>
+    <string name="activation__not_activated">Not activated</string>
+    <string name="activation__activating">Activating…</string>
+    <string name="activation__activated">Card is activated.</string>
+    <string name="activation__error">Error</string>
+
 </resources>
