@@ -25,22 +25,22 @@ fun ScratchScreen(
     ) {
         Button(
             onClick = viewModel::scratchCard,
-            enabled = uiState.state.asEnabled()
+            enabled = uiState.code.asEnabled()
         ) {
             Text(text = "Scratch the Card")
         }
-        Text(text = uiState.state.asTextState())
+        Text(text = uiState.code.asTextState())
     }
 }
 
 private fun Int.asTextState(): String {
     return when (this) {
-        0 -> "Unscratched"
-        1 -> "Scratching..."
+        0 -> "Scratching..."
+        1 -> "Unscratched"
         else -> "Card is scratched, the code is $this."
     }
 }
 
 private fun Int.asEnabled(): Boolean {
-    return this == 0
+    return this == 1
 }

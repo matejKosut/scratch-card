@@ -17,6 +17,9 @@ import sk.matejkosut.scratchcard.data.ScratchCardRepository
 import sk.matejkosut.scratchcard.data.source.local.ScratchCardDao
 import sk.matejkosut.scratchcard.data.source.local.ScratchCardDatabase
 import sk.matejkosut.scratchcard.data.source.network.ActivationService
+import sk.matejkosut.scratchcard.data.source.network.LiveNetworkMonitor
+import sk.matejkosut.scratchcard.data.source.network.NetworkMonitor
+import sk.matejkosut.scratchcard.data.source.network.NetworkMonitorInterceptor
 import javax.inject.Singleton
 
 @Module
@@ -41,10 +44,22 @@ object DataSourceModule {
 
     @Singleton
     @Provides
-    fun providesOkHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient =
+    fun providesLiveNetworkMonitor(
+        @ApplicationContext appContext: Context
+    ): NetworkMonitor {
+        return LiveNetworkMonitor(appContext)
+    }
+
+    @Singleton
+    @Provides
+    fun providesOkHttpClient(
+        httpLoggingInterceptor: HttpLoggingInterceptor,
+        liveNetworkMonitor: LiveNetworkMonitor
+    ): OkHttpClient =
         OkHttpClient
             .Builder()
             .addInterceptor(httpLoggingInterceptor)
+            .addInterceptor(NetworkMonitorInterceptor(liveNetworkMonitor))
             .build()
 
     @Singleton

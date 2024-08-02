@@ -15,7 +15,7 @@ import sk.matejkosut.scratchcard.di.DefaultDispatcher
 import javax.inject.Inject
 
 data class ScratchUiState(
-    var state: Int = 0
+    var code: Int = 1
 )
 
 @HiltViewModel
@@ -41,7 +41,7 @@ class ScratchViewModel @Inject constructor(
     }
 
     fun scratchCard() {
-        _uiState.value = ScratchUiState(1)
+        _uiState.value = ScratchUiState(0)
         scope.launch {
             withContext(dispatcher) {
                 revealCard()

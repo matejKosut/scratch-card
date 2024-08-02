@@ -37,6 +37,7 @@ fun ActivationScreen(
 private fun Int.asTextState(): String {
     return when (this) {
         -1 -> "Not possible to activate. Card needs to be scratched first."
+        -2 -> "No internet connection."
         0 -> "Not activated"
         1 -> "Activating..."
         2 -> "Card is activated."

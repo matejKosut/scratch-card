@@ -9,10 +9,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sk.matejkosut.scratchcard.data.ScratchCardRepository
+import sk.matejkosut.scratchcard.data.source.network.NoNetworkException
 import sk.matejkosut.scratchcard.di.ApplicationScope
 import sk.matejkosut.scratchcard.di.IoDispatcher
-import sk.matejkosut.scratchcard.home.HomeUiState
-import sk.matejkosut.scratchcard.scratch.ScratchUiState
 import javax.inject.Inject
 
 data class ActivationUiState(
@@ -48,13 +47,17 @@ class ActivationViewModel @Inject constructor(
         scope.launch {
             withContext(dispatcher) {
                 val code = scratchCardRepository.getScratchCardCode()
-                val active = scratchCardRepository.activateScratchCard(code)
-                scratchCardRepository.updateScratchCardState(3, code)
-                val activeInt = active.toInt()
-                if (activeInt in 277028..Integer.MAX_VALUE)
-                    _uiState.value = ActivationUiState(2)
-                else
-                    _uiState.value = ActivationUiState(-3)
+                try {
+                    val active = scratchCardRepository.activateScratchCard(code)
+                    scratchCardRepository.updateScratchCardState(3, code)
+                    val activeInt = active.toInt()
+                    if (activeInt in 277028..Integer.MAX_VALUE)
+                        _uiState.value = ActivationUiState(2)
+                    else
+                        _uiState.value = ActivationUiState(-3)
+                } catch (e: NoNetworkException) {
+                    _uiState.value = ActivationUiState(-2)
+                }
             }
         }
     }
