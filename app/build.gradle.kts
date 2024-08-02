@@ -75,7 +75,9 @@ dependencies {
     implementation(libs.retrofit.gson)
     implementation(libs.okhttp3.interceptor)
 
+    // Testing
     testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }

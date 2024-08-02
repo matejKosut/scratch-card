@@ -50,8 +50,7 @@ class ActivationViewModel @Inject constructor(
                 try {
                     val active = scratchCardRepository.activateScratchCard(code)
                     scratchCardRepository.updateScratchCardState(3, code)
-                    val activeInt = active.toInt()
-                    if (activeInt in 277028..Integer.MAX_VALUE)
+                    if (active)
                         _uiState.value = ActivationUiState(2)
                     else
                         _uiState.value = ActivationUiState(-3)

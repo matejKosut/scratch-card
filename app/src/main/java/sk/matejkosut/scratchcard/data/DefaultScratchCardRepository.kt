@@ -2,8 +2,6 @@ package sk.matejkosut.scratchcard.data
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sk.matejkosut.scratchcard.data.source.local.ScratchCard
@@ -48,7 +46,8 @@ class DefaultScratchCardRepository @Inject constructor(
         localDataSource.updateState(state, code)
     }
 
-    override suspend fun activateScratchCard(code: Int): String {
-        return networkDataSource.activateScratchCard(code).android
+    override suspend fun activateScratchCard(code: Int): Boolean {
+        val activeInt = networkDataSource.activateScratchCard(code).android.toInt()
+        return activeInt in 277029..Integer.MAX_VALUE
     }
 }
